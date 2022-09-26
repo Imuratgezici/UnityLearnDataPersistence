@@ -18,6 +18,10 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
+    private string username;
+
+
+
     
     // Start is called before the first frame update
     void Start()
