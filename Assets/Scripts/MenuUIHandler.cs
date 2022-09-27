@@ -12,7 +12,7 @@ using UnityEditor;
 
 public class MenuUIHandler : MonoBehaviour
 {
-    [SerializeField] InputField nameField;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +24,11 @@ public class MenuUIHandler : MonoBehaviour
     {
         
     }
+
+    public void userNameEntered(string username){
+        GameManager.Instance.userName = username;
+    }
+
      public void StartNew(){
         SceneManager.LoadScene(1);
     }

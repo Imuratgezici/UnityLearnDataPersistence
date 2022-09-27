@@ -10,7 +10,7 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
+    public Text ScoreText, BestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -18,7 +18,6 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    private string username;
 
 
 
@@ -26,6 +25,13 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        if (GameManager.Instance != null)
+    {
+        SetBestScore(GameManager.Instance.BestScoreName, GameManager.Instance.BestScore);
+        setUserName(GameManager.Instance.userName);
+    }
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -41,6 +47,13 @@ public class MainManager : MonoBehaviour
             }
         }
     }
+        void SetBestScore(string username, int bestScore)
+    {
+        BestScoreText.text = "Best Score: "+username+" "+bestScore;
+    }
+        void setUserName(string username){
+            ScoreText.text = "Score: ("+username+") 0";
+        }
 
     private void Update()
     {
@@ -69,12 +82,23 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"Score : ({GameManager.Instance.userName}) {m_Points}";
     }
 
+    public void NewBestScoreAchieved(string username, int bestScore)
+{
+    // add code here to handle when a color is selected
+    GameManager.Instance.BestScoreName = username;
+    GameManager.Instance.BestScore = bestScore;
+}
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        if(GameManager.Instance.BestScore < m_Points){
+            NewBestScoreAchieved(GameManager.Instance.userName, m_Points);
+            GameManager.Instance.SaveBestScore();
+        }
     }
 }
